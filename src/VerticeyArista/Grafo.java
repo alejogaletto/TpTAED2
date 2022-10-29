@@ -1,99 +1,132 @@
 package VerticeyArista;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Scanner;
 
-public class Grafo {
-	public static final double INFINITY = Double.MAX_VALUE;
-	private Map<String, Vertice> VerticeMap = new HashMap<String,Vertice>();
+public class Grafo   {
 	
-	public void agregarArista(String nomOri, String nomDest, double cost) {
-		Vertice v = getVertice(nomOri);
-		Vertice w = getVertice(nomDest);
-		v.adyacente.add(new Arista(w, cost));
+	private Map<String, Vertice>VerticeMap = new HashMap<String,Vertice>();
+	Scanner s = new Scanner(System.in);
+
+	
+	public Vertice getVertice(String VerticeName) {
+		Vertice n = VerticeMap.get(VerticeName);
+		return n;
 	}
 	
-	private Vertice getVertice(String VerticeName) {
-		Vertice v = VerticeMap.get(VerticeName);
-		if(v == null) {
-			v = new Vertice(VerticeName);
-			VerticeMap.put(VerticeName, v);
+	public void addVertice(String VerticeName,String VerticeName2, int cost) {
+		Vertice n = VerticeMap.get(VerticeName);
+		Vertice m = VerticeMap.get(VerticeName2);
+		if(n == null) {
+			n = new Vertice(VerticeName);
+			VerticeMap.put(VerticeName,n);
+			System.out.println("Vertice"+ VerticeName +" no encontrado... nuevo Vertice creado");
 		}
-		return v;
-	}
-	
-	public void BFS(String startName) {
-		//clearAll();
-		Vertice start = VerticeMap.get(startName);
+		if(m == null) {
+			n = new Vertice(VerticeName2);
+			VerticeMap.put(VerticeName2,n);
+			System.out.println("Vertice"+ VerticeName2 +" no encontrado... nuevo Vertice creado");
+		}	
+		agregarArista(VerticeName, VerticeName2, cost);
 		
-		Queue<Vertice> q = new LinkedList<Vertice>();
-		q.add(start);
-		start.dist = 0;
-		
-		while(!q.isEmpty()) {
-			Vertice v = q.remove();
 			
-			for(Arista e : v.adyacente) {
-				Vertice w = e.destino;
-				if(w.dist == INFINITY) {
-					w.dist = v.dist +1;
-					w.prev = v;
-					q.add(w);
-				}
-			}
-		}
 	}
-	
-	public void DSF(String origen) {
-		DFS_Visita(origen);
-	}
-	
-	public void DFS_Visita(String startName) {
-		Vertice v = VerticeMap.get(startName);
-		if(v.dist == INFINITY) {
-			v.dist = 0;
-			for(Arista e : v.adyacente) {
-				Vertice w = e.destino;
-				if(w.dist == INFINITY) {
-					w.prev = v;
-					DFS_Visita(w.name);
-				}
-			}
-		}
-	}
-	
-	public void dijkstra(String startName) {
-		Vertice start = VerticeMap.get(startName);
-		start.dist = 0;
-		
-		PriorityQueue<Vertice> pq = new PriorityQueue<Vertice>();
-		
-		pq.add(start);
-		while(!pq.isEmpty()) {
-			Vertice v = pq.remove();
-			for(Arista e : v.adyacente) {
-				Vertice w = e.destino;
-				double cVW = e.costo;
-				if(w.dist > v.dist + cVW) {
-					w.dist = v.dist + cVW;
-					w.prev = v;
-					pq.add(w);
-				}
-			}
-		}
-	}
+
 	
 	
 	public void seeGraph() {
 		if(VerticeMap != null) {
 			for(Map.Entry<String, Vertice> entry : VerticeMap.entrySet()) {
-				System.out.println("Vertice: " + entry.getValue());
+				System.out.println("Vertice: " + entry.getKey());
+				for (Arista e : entry.getValue().adjacente) {
+					System.out.println("  -Apunta a: "+ e.destino.name + "(" + e.costo +")");
+				}
 			}
 		} else {
-			System.out.println("No existen vertices ni aristas en este nodo");
+			System.out.println("No existen vertices ni aristas en este grafo");
 		}
 	}
 	
+	
+	public void dijkstra(String startName, String destino) {
+		clearAll();
+		Vertice start = VerticeMap.get(startName);
+		Vertice end = VerticeMap.get(destino);
+
+		start.dist = 0;
+		
+		Queue<Vertice> pq = new LinkedList<Vertice>();
+		
+		pq.add(start);
+		while(!pq.isEmpty() ) {
+			Vertice v = pq.remove();
+			for(Arista e : v.adjacente) {
+			Vertice w = e.destino;
+			int cVW = (int) e.costo;
+
+		
+			if( w.dist == -1) {
+
+				w.dist = v.dist + cVW;
+				w.prev = v;
+				pq.add(w);}
+			else if (w.dist > v.dist + cVW) {
+				w.dist = v.dist + cVW;
+				w.prev = v;
+				pq.add(w);
+				}
+			
+			
+			}
+		}
+		if (end.dist != -1) {
+			System.out.println("La suma de los pesos del camino mas corto entre " + startName+ " y " + end.name + " es: " + end.dist);
+		}else System.out.println("No hay camino entre estos Vertices");
+	}
+	
+	public void BFS(String startName, String destino) {
+		clearAll();
+		Vertice start = VerticeMap.get(startName);
+		Vertice end = VerticeMap.get(destino);
+
+		
+		Queue<Vertice> q = new LinkedList<Vertice>();
+		q.add(start);
+		start.dist = 0;
+		
+		while (!q.isEmpty()) {
+			Vertice v = q.remove();
+			
+			for( Arista e : v.adjacente) {
+				Vertice w = e.destino;
+				if (w.dist == -1) {
+					w.dist = v.dist + 1;
+					w.prev = v;
+					q.add(w);
+				}
+			}
+		}
+		if (end.dist != -1) {
+			System.out.println("La distancia entre " + startName+ " y " + end.name + " es: " + end.dist);
+		}else System.out.println("No hay camino entre estos Vertices");
+	}
+	
+	private void clearAll() {
+		for (Entry<String, Vertice> e : VerticeMap.entrySet()) {
+			e.getValue().dist = -1;
+		}  
+	}
+	
+	public void agregarArista(String nomOri, String nomDest, int cost) {
+		Vertice v = getVertice(nomOri);
+		Vertice w = getVertice(nomDest);
+		v.adjacente.add(new Arista(w,cost));
+		
+	
+		
+	}
 }

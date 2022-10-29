@@ -8,4 +8,6 @@ public class Arista {
 		destino = d;
 		costo = c;
 	}
+
+
 }

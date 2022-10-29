@@ -1,21 +1,28 @@
 package VerticeyArista;
 
-import java.util.LinkedList;
-import java.util.List;
 
-public class Vertice {
+import java.util.List;
+import java.util.LinkedList;
+
+public class Vertice implements Comparable<Vertice> {
 	public String name;
-	public List<Arista> adyacente;
-	public double dist;
+	public List<Arista> adjacente;
+	public int dist;
 	public Vertice prev;
+	public Object destino;
 	
-	public Vertice(String nm) {
+	public Vertice(String nm)   {
 		name = nm;
-		adyacente = new LinkedList<Arista>();
+		adjacente = new LinkedList<Arista>();
 		reset();
+		
+	}
+	
+	public int compareTo(Vertice other) {
+	    return Integer.compare(this.dist, other.dist);
 	}
 	
 	public void reset() {
-		dist = Grafo.INFINITY;
+		dist = -1;
 	}
 }
