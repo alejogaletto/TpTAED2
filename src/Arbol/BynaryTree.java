@@ -19,10 +19,10 @@ public class BynaryTree {
 	}
 	
 	public void add(int value) {
-		setRoot(addRecursive(getRoot(), value));
+		root = addRecursive(getRoot(), value);
 	}
 	
-	public static BynaryTree createBynaryTree() {
+	public BynaryTree createBynaryTree() {
 		BynaryTree bt = new BynaryTree();
 		
 	    bt.add(6);
@@ -49,39 +49,43 @@ public class BynaryTree {
 		return containsNodeRecursive(getRoot(), value);
 	}
 	
-	private static Node deleteRecursive(Node current, int value) {
-		if(containsNode(value) == true){
-			current = null;
-			return current;
-		}
+	private Node deleteRecursive(Node current, int value) {
+	    if (current == null) {
+	        return null;
+	    }
+	    
+	    if(value == current.value) {
+	    	if (current.left == null && current.right == null) {
+	    	    return null;
+	    	}
+	    	
+	    	if (current.right == null) {
+	    	    return current.left;
+	    	}
+
+	    	if (current.left == null) {
+	    	    return current.right;
+	    	}
+		    int smallestValue = findSmallestValue(current.right);
+		    current.value = smallestValue;
+		    current.right = deleteRecursive(current.right, smallestValue);
+		    return current;
+	    }
 		
 	    if (value < current.value) {
 	        current.left = deleteRecursive(current.left, value);
 	        return current;
 	    }
-	    if (current.left == null && current.right == null) {
-	        return null;
-	    }
-	    if (current.right == null) {
-	        return current.left;
-	    }
-
-	    if (current.left == null) {
-	        return current.right;
-	    }
-	    int smallestValue = findSmallestValue(current.right);
-	    current.value = smallestValue;
-	    current.right = deleteRecursive(current.right, smallestValue);
+	    current.right = deleteRecursive(current.right, value);
 	    return current;
-	   
 	}
 	
 	private static int findSmallestValue(Node root) {
 		return root.left == null ? root.value : findSmallestValue(root.left);
 	}
 	
-	public static void delete(int value) {
-	    deleteRecursive(getRoot(), value);
+	public void delete(int value) {
+	    root = deleteRecursive(root, value);
 	}
 	
 	public void traverseInOrder(Node node) {

@@ -1,6 +1,4 @@
 package Main;
-import java.util.*;
-
 import Arbol.BynaryTree;
 import VerticeyArista.*;
 import java.util.Scanner;
@@ -48,18 +46,13 @@ public class Main {
 
 			grafo.seeGraph();
 			grafo.dijkstra("d12", "d5");
-
 			grafo.BFS("d12","d5");
+			
+			System.out.println("Grafos aciclicos: ");
+			grafo.buscarGrafo();
 		} else if(opt == 2) {
 			BynaryTree btn = new BynaryTree();
 			btn.createBynaryTree();
-		    btn.add(6);
-		    btn.add(4);
-		    btn.add(8);
-		    btn.add(3);
-		    btn.add(5);
-		    btn.add(7);
-		    btn.add(9);
 			while(true) {
 				System.out.println("Oprima [1] si desea recorrer el arbol en PreOrder");
 				System.out.println("Oprima [2] si desea recorrer el arbol en InOrder");
@@ -69,13 +62,13 @@ public class Main {
 				int opc = sc.nextInt();
 				switch(opc) {
 				case 1:
-					btn.traversePreOrder(btn.getRoot());
+					btn.traversePreOrder(BynaryTree.getRoot());
 					break;
 				case 2:
-					btn.traverseInOrder(btn.getRoot());
+					btn.traverseInOrder(BynaryTree.getRoot());
 					break;
 				case 3:
-					btn.traversePostOrder(btn.getRoot());
+					btn.traversePostOrder(BynaryTree.getRoot());
 					break;
 				case 4:
 					System.out.println("Que nodo desea eliminar?");
