@@ -52,7 +52,7 @@ public class Main {
 			grafo.buscarGrafo();
 		} else if(opt == 2) {
 			BynaryTree btn = new BynaryTree();
-			btn.createBynaryTree();
+			btn.crearArbol();
 			while(true) {
 				System.out.println("Oprima [1] si desea recorrer el arbol en PreOrder");
 				System.out.println("Oprima [2] si desea recorrer el arbol en InOrder");
@@ -62,18 +62,18 @@ public class Main {
 				int opc = sc.nextInt();
 				switch(opc) {
 				case 1:
-					btn.traversePreOrder(BynaryTree.getRoot());
+					btn.recorrerInPreOrder(BynaryTree.getraiz());
 					break;
 				case 2:
-					btn.traverseInOrder(BynaryTree.getRoot());
+					btn.recorrerInOrder(BynaryTree.getraiz());
 					break;
 				case 3:
-					btn.traversePostOrder(BynaryTree.getRoot());
+					btn.recorrerInPostOrder(BynaryTree.getraiz());
 					break;
 				case 4:
 					System.out.println("Que nodo desea eliminar?");
 					int chc = sc.nextInt();
-					btn.delete(chc);
+					btn.eliminar(chc);
 					System.out.println("Nodo eliminado");
 					break;
 			}

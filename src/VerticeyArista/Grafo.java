@@ -1,37 +1,38 @@
 package VerticeyArista;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
 
 
 public class Grafo   {
 	
 	private Map<String, Vertice>VerticeMap = new HashMap<String,Vertice>();
 	
-	public Vertice getVertice(String VerticeName) {
-		Vertice v = VerticeMap.get(VerticeName);
+	public Vertice getVertice(String Verticenombre) {
+		Vertice v = VerticeMap.get(Verticenombre);
 		return v;
 	}
 	
-	public void addVertice(String VerticeName,String VerticeName2, int cost) {
-		Vertice v = VerticeMap.get(VerticeName);
-		Vertice m = VerticeMap.get(VerticeName2);
+	public void addVertice(String Verticenombre,String Verticenombre2, int cost) {
+		Vertice v = VerticeMap.get(Verticenombre);
+		Vertice m = VerticeMap.get(Verticenombre2);
 		if(v == null) {
-			v = new Vertice(VerticeName);
-			VerticeMap.put(VerticeName,v);
-			System.out.println("Vertice: "+ VerticeName +" no encontrado, se creo el vertice indicado");
+			v = new Vertice(Verticenombre);
+			VerticeMap.put(Verticenombre,v);
+			System.out.println("Vertice: "+ Verticenombre +" no encontrado, se creo el vertice indicado");
 		}
 		if(m == null) {
-			v = new Vertice(VerticeName2);
-			VerticeMap.put(VerticeName2,v);
-			System.out.println("Vertice"+ VerticeName2 +" no encontrado, se creo el vertice indicado");
+			v = new Vertice(Verticenombre2);
+			VerticeMap.put(Verticenombre2,v);
+			System.out.println("Vertice"+ Verticenombre2 +" no encontrado, se creo el vertice indicado");
 		}	
-		agregarArista(VerticeName, VerticeName2, cost);
+		agregarArista(Verticenombre, Verticenombre2, cost);
 		
 			
 	}
@@ -54,15 +55,15 @@ public class Grafo   {
 			for(Vertice valr2 : VerticeMap.values()) {
 				clearAll();
 				if(valr2 != valr1) {
-					imprimirTodos(valr1, valr2);
+					Allcaminos(valr1, valr2);
 				}
 			}
 		}
 	}
 	
-	public void dijkstra(String inicioName, String destino) {
+	public void dijkstra(String inicionombre, String destino) {
 		clearAll();
-		Vertice inicio = VerticeMap.get(inicioName);
+		Vertice inicio = VerticeMap.get(inicionombre);
 		Vertice fin = VerticeMap.get(destino);
 
 		inicio.dist = 0;
@@ -92,7 +93,7 @@ public class Grafo   {
 			}
 		}
 		if (fin.dist != -1) {
-			System.out.println("La suma de los pesos del camino mas corto entre " + inicioName+ " y " + fin.nombre + " es: " + fin.dist);
+			System.out.println("La suma de los pesos del camino mas corto entre " + inicionombre+ " y " + fin.nombre + " es: " + fin.dist);
 		}else System.out.println("No hay camino entre estos Vertices");
 	}
 	
@@ -130,29 +131,29 @@ public class Grafo   {
 		}  
 	}
 	
-	public void imprimirTodos(Vertice v, Vertice n) {
-		ArrayList<String> listaCaminos = new ArrayList<>();
-		listaCaminos.add(v.nombre);
-		caminosAciclicos(v,n,listaCaminos);
-	}
-	
-	private void caminosAciclicos(Vertice j, Vertice t, List<String> localPathList) {
-		if(j.equals(t)) {
-			System.out.println(localPathList);
-			return;
-		}
-		
-		j.setVisitado(true);
-		
-		for(Arista i : j.adyacente) {
-			if(!i.destino.esVisitado()) {
-				localPathList.add(i.destino.nombre);
-				caminosAciclicos(i.destino, t, localPathList);
-				localPathList.remove(i.destino.nombre);
-			}
-		}
-		j.setVisitado(true);
-	}
+	 private Stack<String> camino  = new Stack<String>();  
+	    private Set<String> onCamino  = new HashSet<String>();    
+	    public void Allcaminos(Vertice S, Vertice R) {
+	        numerar(S,R);
+	    }
+
+	    public void numerar(Vertice S, Vertice T) {
+
+	        camino.push(S.nombre);
+	        onCamino.add(S.nombre);
+
+	        if (S.nombre.equals(T.nombre))
+	            System.out.println(camino);
+
+	        else {
+	            for (Arista w : S.adyacente) {
+	                if (!onCamino.contains(w.destino.nombre)) numerar(w.destino,T);
+	            }
+	        }
+
+	        camino.pop();
+	        onCamino.remove(S.nombre);
+	    }
 	
 	
 	public void agregarArista(String nomOri, String nomDest, int cost) {

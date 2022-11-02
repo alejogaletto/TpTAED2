@@ -1,125 +1,125 @@
 package Arbol;
 
 public class BynaryTree {
-	private static Node root;
+	private static Node raiz;
 	
-	private Node addRecursive(Node current, int value) {
-		if(current == null) {
-			return new Node(value);
+	private Node agregarRec(Node actual, int valor) {
+		if(actual == null) {
+			return new Node(valor);
 		}
 		
-		if(value < current.value) {
-			current.left = addRecursive(current.left, value);
-		} else if(value > current.value) {
-			current.right = addRecursive(current.right, value);
+		if(valor < actual.value) {
+			actual.left = agregarRec(actual.left, valor);
+		} else if(valor > actual.value) {
+			actual.right = agregarRec(actual.right, valor);
 		} else {
-			return current;
+			return actual;
 		}
-		return current;
+		return actual;
 	}
 	
-	public void add(int value) {
-		root = addRecursive(getRoot(), value);
+	public void agregar(int valor) {
+		raiz = agregarRec(getraiz(), valor);
 	}
 	
-	public BynaryTree createBynaryTree() {
+	public BynaryTree crearArbol() {
 		BynaryTree bt = new BynaryTree();
 		
-	    bt.add(6);
-	    bt.add(4);
-	    bt.add(8);
-	    bt.add(3);
-	    bt.add(5);
-	    bt.add(7);
-	    bt.add(9);
+	    bt.agregar(6);
+	    bt.agregar(4);
+	    bt.agregar(8);
+	    bt.agregar(3);
+	    bt.agregar(5);
+	    bt.agregar(7);
+	    bt.agregar(9);
 
 	    return bt;
 	}
 	
-	public static boolean containsNodeRecursive(Node current, int value) {
-		if(current == null) {
+	public static boolean contNodoRec(Node actual, int valor) {
+		if(actual == null) {
 			return false;
-		}if(value == current.value) {
+		}if(valor == actual.value) {
 			return true;
 		}
-		return value < current.value ? containsNodeRecursive(current.left, value) :  containsNodeRecursive(current.right, value);  
+		return valor < actual.value ? contNodoRec(actual.left, valor) :  contNodoRec(actual.right, valor);  
 	}
 	
-	public static boolean containsNode(int value) {
-		return containsNodeRecursive(getRoot(), value);
+	public static boolean contNodo(int valor) {
+		return contNodoRec(getraiz(), valor);
 	}
 	
-	private Node deleteRecursive(Node current, int value) {
-	    if (current == null) {
+	private Node eliminarRec(Node actual, int valor) {
+	    if (actual == null) {
 	        return null;
 	    }
 	    
-	    if(value == current.value) {
-	    	if (current.left == null && current.right == null) {
+	    if(valor == actual.value) {
+	    	if (actual.left == null && actual.right == null) {
 	    	    return null;
 	    	}
 	    	
-	    	if (current.right == null) {
-	    	    return current.left;
+	    	if (actual.right == null) {
+	    	    return actual.left;
 	    	}
 
-	    	if (current.left == null) {
-	    	    return current.right;
+	    	if (actual.left == null) {
+	    	    return actual.right;
 	    	}
-		    int smallestValue = findSmallestValue(current.right);
-		    current.value = smallestValue;
-		    current.right = deleteRecursive(current.right, smallestValue);
-		    return current;
+		    int smallestvalor = encontrarMenor(actual.right);
+		    actual.value = smallestvalor;
+		    actual.right = eliminarRec(actual.right, smallestvalor);
+		    return actual;
 	    }
 		
-	    if (value < current.value) {
-	        current.left = deleteRecursive(current.left, value);
-	        return current;
+	    if (valor < actual.value) {
+	        actual.left = eliminarRec(actual.left, valor);
+	        return actual;
 	    }
-	    current.right = deleteRecursive(current.right, value);
-	    return current;
+	    actual.right = eliminarRec(actual.right, valor);
+	    return actual;
 	}
 	
-	private static int findSmallestValue(Node root) {
-		return root.left == null ? root.value : findSmallestValue(root.left);
+	private static int encontrarMenor(Node raiz) {
+		return raiz.left == null ? raiz.value : encontrarMenor(raiz.left);
 	}
 	
-	public void delete(int value) {
-	    root = deleteRecursive(root, value);
+	public void eliminar(int valor) {
+	    raiz = eliminarRec(raiz, valor);
 	}
 	
-	public void traverseInOrder(Node node) {
+	public void recorrerInOrder(Node node) {
 	    if (node != null) {
-	        traverseInOrder(node.left);
+	        recorrerInOrder(node.left);
 	        System.out.print(" " + node.value + "\n");
-	        traverseInOrder(node.right);
-	    }
-	}
-	
-	public void traversePostOrder(Node node) {
-	    if (node != null) {
-	        traversePostOrder(node.left);
-	        traversePostOrder(node.right);
-	        System.out.print(" " + node.value + "\n");
+	        recorrerInOrder(node.right);
 	    }
 	}
 	
-	public  void traversePreOrder(Node node) {
+	public void recorrerInPostOrder(Node node) {
+	    if (node != null) {
+	        recorrerInPostOrder(node.left);
+	        recorrerInPostOrder(node.right);
+	        System.out.print(" " + node.value + "\n");
+	    }
+	}
+	
+	public  void recorrerInPreOrder(Node node) {
 	    if (node != null) {
 	        System.out.print(" " + node.value + "\n");
-	        traversePreOrder(node.left);
-	        traversePreOrder(node.right);
+	        recorrerInPreOrder(node.left);
+	        recorrerInPreOrder(node.right);
 	    }
 	}
 	
 
 
-	public static Node getRoot() {
-		return root;
+	public static Node getraiz() {
+		return raiz;
 	}
 
-	public static void setRoot(Node root) {
-		BynaryTree.root = root;
+	public static void setraiz(Node raiz) {
+		BynaryTree.raiz = raiz;
 	}
 }
 
